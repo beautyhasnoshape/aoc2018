@@ -92,17 +92,6 @@ public class Day05 {
         return a < 'a' ? a == b - 32 : a == b + 32;
     }
 
-    private int countNonZero(byte[] input) {
-        int count = 0;
-        for (byte b : input) {
-            if (b != 0) {
-                ++count;
-            }
-        }
-
-        return count;
-    }
-
     public int solvePartB(String input) {
         int bestCount = Integer.MAX_VALUE;
         for (byte aByte = 'A'; aByte <= 'Z'; aByte++) {
