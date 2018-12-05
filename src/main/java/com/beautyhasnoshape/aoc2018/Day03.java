@@ -1,4 +1,4 @@
-package beauty.aoc2018;
+package com.beautyhasnoshape.aoc2018;
 
 import java.util.List;
 

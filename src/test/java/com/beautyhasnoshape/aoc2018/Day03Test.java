@@ -1,4 +1,4 @@
-package beauty.aoc2018;
+package com.beautyhasnoshape.aoc2018;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class Day03Test {
     @Test
     public void shouldSolvePartA() throws Exception {
         // given
-        Path path = Paths.get(getClass().getResource("/Day03.txt").toURI());
+        Path path = Paths.get(getClass().getResource("Day03.txt").toURI());
         List<String> lines = Files.readAllLines(path);
 
         // when
@@ -35,7 +35,7 @@ public class Day03Test {
     @Test
     public void shouldSolvePartB() throws Exception {
         // given
-        Path path = Paths.get(getClass().getResource("/Day03.txt").toURI());
+        Path path = Paths.get(getClass().getResource("Day03.txt").toURI());
         List<String> lines = Files.readAllLines(path);
 
         // when
