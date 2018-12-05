@@ -3,6 +3,7 @@ package com.beautyhasnoshape.aoc2018;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Stack;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -61,31 +62,34 @@ import org.apache.commons.lang3.ArrayUtils;
  */
 public class Day05 {
 
+    /**
+     * Idea for this nice solution was inspired by a remark of my colleague at work who started this day
+     * as early as I did and suggested to use the stack in order to optimize the solution.
+     * And here it is, enormous fast and elegant :)
+     * It requires only one iteration and the algorithm is greedy: iterates from left to right and tries to reduce
+     * current, and then already processed elements from the stack.
+     * Solution was inspired by the shake-sort, where the cursor will navigate back and forth and will reduce
+     * adjacent elements in the current position.
+     * @param input
+     * @return
+     */
     public int solvePartA(String input) {
+        Stack<Byte> stack = new Stack<>();
         byte[] bytes = input.getBytes();
-        boolean hasChanged;
 
-        do {
-            hasChanged = false;
-            int prevPos = -1;
-            for (int i = 0; i < bytes.length - 1; i++) {
-                if (bytes[i] == 0) {
-                    continue;
-                } else if (prevPos == -1) {
-                    prevPos = i;
-                } else if (Math.abs(bytes[prevPos] - bytes[i]) == 32) {
-                    bytes[prevPos] = 0;
-                    bytes[i] = 0;
-
-                    prevPos = -1;
-                    hasChanged = true;
-                } else {
-                    prevPos = i;
-                }
+        for (byte aByte : bytes) {
+            if (!stack.isEmpty() && matches(aByte, stack.peek())) {
+                stack.pop();
+            } else {
+                stack.push(aByte);
             }
-        } while (hasChanged);
+        }
 
-        return countNonZero(bytes);
+        return stack.size();
+    }
+
+    private boolean matches(byte a, byte b) {
+        return a < 'a' ? a == b - 32 : a == b + 32;
     }
 
     private int countNonZero(byte[] input) {
@@ -99,93 +103,19 @@ public class Day05 {
         return count;
     }
 
-    public String solvePartA1(String input) {
-        byte[] bytes = input.getBytes();
-        boolean hasChanged;
-
-        do {
-            hasChanged = false;
-            for (int i = 0; i < bytes.length - 1; i++) {
-                if (Math.abs(bytes[i] - bytes[i + 1]) == 32) {
-                    byte[] tmp = new byte[bytes.length - 2];
-                    System.arraycopy(bytes, 0, tmp, 0, i);
-                    System.arraycopy(bytes, i+2, tmp, i, bytes.length-i-2);
-
-                    bytes = tmp;
-                    hasChanged = true;
-
-                    break;
-                }
-            }
-        } while (hasChanged);
-
-        return new String(bytes);
-    }
-
-    private Set<Byte> getUpperChars(byte[] input) {
-        Set<Byte> chars = new HashSet<>(26);
-        for (byte aByte : input) {
-            if (aByte >= 'A' && aByte <= 'Z') {
-                chars.add(aByte);
-            }
-        }
-
-        return chars;
-    }
-
     public int solvePartB(String input) {
         int bestCount = Integer.MAX_VALUE;
-        Set<Byte> chars = getUpperChars(input.getBytes());
+        for (byte aByte = 'A'; aByte <= 'Z'; aByte++) {
 
-        Iterator<Byte> charIterator = chars.iterator();
-        while (charIterator.hasNext()) {
-            byte b = charIterator.next();
-            byte[] bytes = replace(input.getBytes(), b, (byte) 0);
-            int length = solvePartA(new String(bytes));
-            if (length < bestCount) {
-                bestCount = length;
+            String s = input.replaceAll(String.valueOf((char) aByte), "");
+            s = s.replaceAll(String.valueOf((char) (aByte + 32)), "");
+
+            int len = solvePartA(s);
+            if (len < bestCount) {
+                bestCount = len;
             }
         }
 
         return bestCount;
-    }
-
-    public int solvePartB1(String input) {
-        int bestCount = Integer.MAX_VALUE;
-        for (byte b = 'A'; b <= 'Z'; b++) {
-            byte[] bytes = replace(input.getBytes(), b, (byte) 0);
-            int length = solvePartA(new String(bytes));
-            if (length < bestCount) {
-                bestCount = length;
-            }
-        }
-
-        return bestCount;
-    }
-
-    public int solvePartB2(String input) {
-        byte[] bytes = input.getBytes();
-
-        int bestCount = Integer.MAX_VALUE;
-            for (byte b = 'A'; b <= 'Z'; b++) {
-                byte[] output = ArrayUtils.removeAllOccurences(bytes,  b);
-                output = ArrayUtils.removeAllOccurences(output,  (byte) (b + 32));
-                int length = solvePartA(new String(output));
-                if (length < bestCount) {
-                    bestCount = length;
-                }
-            }
-
-        return bestCount;
-    }
-
-    private byte[] replace(byte[] input, byte oldValue, byte newValue) {
-        for (int i = 0; i < input.length; i++) {
-            if (input[i] == oldValue || input[i] == (oldValue + 32)) {
-                input[i] = newValue;
-            }
-        }
-
-        return input;
     }
 }
