@@ -97,23 +97,24 @@ public class Day08 {
     }
 
     public int solvePartB(int[] data) {
-        Pair result = process(data, 0, 0);
+        Pair result = processB(data, 0);
         return result.value;
     }
 
-    private Pair process(int[] data, int offset, int childNo) {
+    private Pair processB(int[] data, int offset) {
         int childrenCount = data[offset++];
         int metadataCount = data[offset++];
 
         Map<Integer, Pair> children = new HashMap<>();
         for (int child = 0; child < childrenCount; child++) {
-            Pair result = process(data, offset, child);
+            Pair result = processB(data, offset);
             children.put(child + 1, result);
             offset = result.offset;
         }
 
         int value = 0;
         for (int i = 0; i < metadataCount; i++) {
+            sum += data[offset];
             if (childrenCount == 0) {
                 value += data[offset++];
             } else {
