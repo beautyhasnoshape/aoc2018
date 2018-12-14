@@ -13,7 +13,7 @@ public class Day14Test {
     }
 
     @Test
-    public void shouldSolvePartA() throws Exception {
+    public void shouldSolvePartA() {
         // given
 
         // when
@@ -24,7 +24,7 @@ public class Day14Test {
     }
 
     @Test
-    public void shouldSolvePartB() throws Exception {
+    public void shouldSolvePartB() {
         // given
 
         // when
@@ -35,7 +35,7 @@ public class Day14Test {
     }
 
     @Test
-    public void shouldSolvePartASample1() throws Exception {
+    public void shouldSolvePartASample1() {
         // given
 
         // when
@@ -46,7 +46,7 @@ public class Day14Test {
     }
 
     @Test
-    public void shouldSolvePartASample2() throws Exception {
+    public void shouldSolvePartASample2() {
         // given
 
         // when
@@ -57,7 +57,7 @@ public class Day14Test {
     }
 
     @Test
-    public void shouldSolvePartASample3() throws Exception {
+    public void shouldSolvePartASample3() {
         // given
 
         // when
@@ -68,7 +68,7 @@ public class Day14Test {
     }
 
     @Test
-    public void shouldSolvePartASample4() throws Exception {
+    public void shouldSolvePartASample4() {
         // given
 
         // when
