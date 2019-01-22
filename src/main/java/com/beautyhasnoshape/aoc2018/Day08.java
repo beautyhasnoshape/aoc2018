@@ -76,63 +76,46 @@ import java.util.Map;
 public class Day08 {
 
     public int solvePartA(int[] data) {
-        processA(data, 0);
-        return sum;
-    }
-
-    private int sum = 0;
-    private int processA(int[] data, int offset) {
-        int children = data[offset++];
-        int metadataCount = data[offset++];
-
-        for (int child = 0; child < children; child++) {
-            offset = processA(data, offset);
-        }
-
-        for (int i = 0; i < metadataCount; i++) {
-            sum += data[offset++];
-        }
-
-        return offset;
+        Pair result = new Pair();
+        process(data, 0, result);
+        return result.metadataSum;
     }
 
     public int solvePartB(int[] data) {
-        Pair result = processB(data, 0);
+        Pair result = new Pair();
+        process(data, 0, result);
         return result.value;
     }
 
-    private Pair processB(int[] data, int offset) {
+    private void process(int[] data, int offset, Pair result) {
         int childrenCount = data[offset++];
         int metadataCount = data[offset++];
 
         Map<Integer, Pair> children = new HashMap<>();
         for (int child = 0; child < childrenCount; child++) {
-            Pair result = processB(data, offset);
+            process(data, offset, result);
             children.put(child + 1, result);
             offset = result.offset;
         }
 
-        int value = 0;
         for (int i = 0; i < metadataCount; i++) {
-            sum += data[offset];
+            int metadata = data[offset];
+            result.metadataSum += metadata;
             if (childrenCount == 0) {
-                value += data[offset++];
+                result.value += metadata;
             } else {
-                int childId = data[offset++];
+                int childId = metadata;
                 if (children.containsKey(childId)) {
-                    value += children.get(childId).value;
+                    result.value += children.get(childId).value;
                 }
             }
+            ++offset;
         }
 
-        Pair result = new Pair();
         result.offset = offset;
-        result.value = value;
-
-        return result;
     }
 
     private class Pair {
-        int offset, value;
+        int offset, value, metadataSum;
     }
 }
